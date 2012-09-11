@@ -1,0 +1,79 @@
+<!Doctype html>
+<html>
+<head>
+
+
+
+
+
+</head>
+<body>
+
+
+
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript">
+		$("document").ready(function () {
+			console.log(calculate(sample));
+		});
+		var sample = [
+			{
+				x:5,
+				y:5
+			},
+			{
+				x:6,
+				y:6
+			},
+			{
+				x:9,
+				y:5
+			}
+		];
+
+		function calculate (points) {
+			var lowestY = null;
+			var highestY = null;
+			for (var p = points.length - 1; p >= 0; p--) {
+				var y = points[p].y;
+				if (lowestY === null || highestY === null) {
+					lowestY = y;
+					highestY = y;
+				} else {
+					if (y < lowestY) {
+						lowestY = y;
+					}
+					if (y > highestY) {
+						highestY = y;
+					}
+				}
+			}
+			var lowestR = null;
+			var result = {};
+			var accuracy = 0.01;
+			var precision = 2;
+			for (var b = lowestY; b <= highestY; b += accuracy) {
+				b = Math.round(b*100)/100;
+				for (var m = -10; m <= 10; m += accuracy) {
+					m = Math.round(m*100)/100;
+					var r = 0;
+					for (var p = points.length - 1; p >= 0; p--) {
+						var point = points[p];
+						var x = point.x;
+						var y = m*x+b;
+						r += Math.abs(point.y-y);
+					}
+					console.log({r:r,b:b,m:m});
+					if (lowestR === null) {
+						lowestR = r;
+					} else if(r < lowestR) {
+						lowestR = r;
+						result = {r:r,b:b,m:m}
+					}
+				}
+			}
+			return result;
+		}
+	</script>
+</body>
+</html>
